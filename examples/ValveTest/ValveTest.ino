@@ -5,6 +5,7 @@
 
 #define DHTPIN 2     // what digital pin we're connected to
 #define ValvePin 4
+#define ledPin 13
 
 // Uncomment whatever type you're using!
 //#define DHTTYPE DHT11   // DHT 11
@@ -24,18 +25,20 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 int ValvePinState = LOW;
+int ledPinState = LOW;
 
 void setup() {
   Serial.begin(9600);
   Serial.println("DHTxx test!");
   pinMode(ValvePin,OUTPUT); 
+  pinMode(ledPin,OUTPUT); 
 
   dht.begin();
 }
 
 void loop() {
   // Wait a few seconds between measurements.
-  delay(2000);
+  delay(5000);
 
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
@@ -50,6 +53,12 @@ void loop() {
     Serial.println("Failed to read from DHT sensor!");
     return;
   }
+  if(ledPinState==HIGH){
+  	ledPinState = LOW;
+  	} else { 
+  	ledPinState = HIGH;
+  	}
+  	digitalWrite(ledPin, ledPinState);
   if(ValvePinState==HIGH){
   	ValvePinState = LOW;
   	} else { 
